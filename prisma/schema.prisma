@@ -20,6 +20,44 @@ model Customer {
   name String 
   email String @unique
   phone String @unique
+  wallet Wallet?
+  comments Comment[]
 
   @@map("customers")
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  title String
+  description String? @db.Text
+  customer_id String
+  customer Customer @relation(fields: [customer_id], references: [id])
+
+  @@map("comments")
+}
+
+model Product {
+  id String @id
+  name String
+  price Int
+  stock Int
+  category String
+
+  @@map("products")
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+
+  @@map("categories")
+}
+
+model Wallet {
+  id String @id @db.VarChar(100)
+  balance Int @db.Int
+  customer_id String @unique
+  customer Customer @relation(fields: [customer_id], references: [id])
+
+  @@map("wallet")
 }
