@@ -43,3 +43,20 @@ INSERT INTO comments (customer_id,title,description) VALUES
 ('a-11','Sample 2','Description 2'),
 ('a-02','Sample 1','Description 1'),
 ('a-02','Sample 2','Description 2');
+
+CREATE TABLE likes (
+  customer_id VARCHAR(255) not NULL,
+  product_id VARCHAR(255) not NULL,
+  constraint likes_customer_id_fk foreign key (customer_id) references customers (id),
+  constraint likes_product_id_fk foreign key (product_id) references products (id)
+)engine innodb;
+
+CREATE TABLE _loves (
+  A varchar(255) not null,
+  B varchar(255) not null,
+  primary key (A,B),
+  constraint customer_loves_fk foreign key (A) references customers(id),
+  constraint product_loves_fk foreign key (B) references products(id)
+)engine innodb;
+
+CREATE DATABASE belajar_prisma_migrate;

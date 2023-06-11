@@ -11,44 +11,49 @@ datasource db {
 }
 
 model sample {
-  id String @id
-  name String
+  id String @id @db.VarChar(255)
+  name String @db.VarChar(255)
+  description String? @db.Text
 }
 
 model Customer {
-  id String @id
-  name String 
-  email String @unique
-  phone String @unique
+  id String @id @db.VarChar(255)
+  name String @db.VarChar(255)
+  email String @unique @db.VarChar(255)
+  phone String @unique @db.VarChar(255)
   wallet Wallet?
   comments Comment[]
+  likes Like[]
+  loves Product[] @relation("loves")
 
   @@map("customers")
 }
 
 model Comment {
   id Int @id @default(autoincrement())
-  title String
+  title String @db.VarChar(255)
   description String? @db.Text
-  customer_id String
+  customer_id String @db.VarChar(255)
   customer Customer @relation(fields: [customer_id], references: [id])
 
   @@map("comments")
 }
 
 model Product {
-  id String @id
-  name String
+  id String @id @db.VarChar(255)
+  name String @db.VarChar(255)
   price Int
   stock Int
-  category String
+  category String @db.VarChar(255)
+  likeBy Like[]
+  lovedBy Customer[] @relation("loves")
 
   @@map("products")
 }
 
 model Category {
   id Int @id @default(autoincrement())
-  name String
+  name String @db.VarChar(255)
 
   @@map("categories")
 }
@@ -56,8 +61,18 @@ model Category {
 model Wallet {
   id String @id @db.VarChar(100)
   balance Int @db.Int
-  customer_id String @unique
+  customer_id String @unique @db.VarChar(255)
   customer Customer @relation(fields: [customer_id], references: [id])
 
   @@map("wallet")
+}
+
+model Like {
+  customer_id String @db.VarChar(255)
+  product_id String @db.VarChar(255)
+  customer Customer @relation(fields: [customer_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@id([customer_id,product_id])
+  @@map("likes")
 }
